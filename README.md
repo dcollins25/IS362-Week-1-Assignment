@@ -1,4 +1,4 @@
-# IS362-Week-1-Assignmnet
+# IS362-Week-1-Assignment
  Dan Collins IS362-Week-1-Assignmnet
 
 See the DCollins_IS-362-Assignment-1.txt file for Week-1-Assignment answeres.
