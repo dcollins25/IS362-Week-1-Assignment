@@ -1,0 +1,200 @@
+1. How many airplanes have listed speeds? 
+	- ANSWER: 23
+
+mysql> select model, speed from planes WHERE speed IS NOT NULL;
++-------------+-------+
+| model       | speed |
++-------------+-------+
+| 150         |    90 |
+| 421C        |    90 |
+| PA-31-350   |   162 |
+| 310Q        |   167 |
+| 172E        |   105 |
+| DC-7BF      |   232 |
+| PA-28-180   |   107 |
+| 206B        |   112 |
+| A185F       |   127 |
+| PA-31-350   |   162 |
+| PA-32R-300  |   126 |
+| OTTER DHC-3 |    95 |
+| DC-9-51     |   432 |
+| 65-A90      |   202 |
+| 172M        |   108 |
+| DC-9-51     |   432 |
+| 172N        |   105 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
++-------------+-------+
+23 rows in set (0.00 sec)
+
+ - What is the minimum listed speed and the maximum listed speed?
+	- ANSWER:
+		> MIN: 90
+		> MAX: 432
+
+mysql> select model, speed from planes WHERE speed IS NOT NULL ORDER BY speed ASC;
++-------------+-------+
+| model       | speed |
++-------------+-------+
+| 150         |    90 |
+| 421C        |    90 |
+| OTTER DHC-3 |    95 |
+| 172E        |   105 |
+| 172N        |   105 |
+| PA-28-180   |   107 |
+| 172M        |   108 |
+| 206B        |   112 |
+| PA-32R-300  |   126 |
+| A185F       |   127 |
+| PA-31-350   |   162 |
+| PA-31-350   |   162 |
+| 310Q        |   167 |
+| 65-A90      |   202 |
+| DC-7BF      |   232 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
++-------------+-------+
+23 rows in set (0.00 sec)
+
+mysql> select model, speed from planes WHERE speed IS NOT NULL ORDER BY speed DESC;
++-------------+-------+
+| model       | speed |
++-------------+-------+
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-9-51     |   432 |
+| DC-7BF      |   232 |
+| 65-A90      |   202 |
+| 310Q        |   167 |
+| PA-31-350   |   162 |
+| PA-31-350   |   162 |
+| A185F       |   127 |
+| PA-32R-300  |   126 |
+| 206B        |   112 |
+| 172M        |   108 |
+| PA-28-180   |   107 |
+| 172E        |   105 |
+| 172N        |   105 |
+| OTTER DHC-3 |    95 |
+| 150         |    90 |
+| 421C        |    90 |
++-------------+-------+
+23 rows in set (0.00 sec)
+
+---------------------------
+
+2. What is the total distance flown by all of the planes in January 2013?
+	- ANSWER: 27188805
+
+mysql> select SUM(distance) from flights WHERE month = 1 AND year = 2013;
++---------------+
+| SUM(distance) |
++---------------+
+|      27188805 |
++---------------+
+1 row in set (0.18 sec) 
+
+  - What is the total distance flown by all of the planes in January 2013 where the tailnum is missing?
+	- ANSWER: 27107042
+
+mysql> select SUM(distance) from flights WHERE month = 1 AND year = 2013 AND tailnum IS NOT NULL;
++---------------+
+| SUM(distance) |
++---------------+
+|      27107042 |
++---------------+
+1 row in set (0.19 sec)
+
+-----------------------------
+
+3. What is the total distance flown for all planes on July 5, 2013 grouped by aircraft manufacturer? 
+	- ANSWER:<See Tables Below>
+
+ - Write this statement first using an INNER JOIN ...
+	- ANSWER: INNER JOIN table here: 
+
+mysql>  select day, month, flights.year, flight, manufacturer, SUM(distance) from flights INNER JOIN planes ON flights.tailnum = planes.tailnum WHERE day = 5 AND month = 7 AND flights.year = 2013 GROUP BY manufacturer ORDER BY manufacturer;
++------+-------+------+--------+-------------------------------+---------------+
+| day  | month | year | flight | manufacturer                  | SUM(distance) |
++------+-------+------+--------+-------------------------------+---------------+
+|    5 |     7 | 2013 |   1459 | AIRBUS                        |        195089 |
+|    5 |     7 | 2013 |   1613 | AIRBUS INDUSTRIE              |         78786 |
+|    5 |     7 | 2013 |    371 | AMERICAN AIRCRAFT INC         |          2199 |
+|    5 |     7 | 2013 |    527 | BARKER JACK L                 |           937 |
+|    5 |     7 | 2013 |   1641 | BOEING                        |        335028 |
+|    5 |     7 | 2013 |   5222 | BOMBARDIER INC                |         31160 |
+|    5 |     7 | 2013 |   5716 | CANADAIR                      |          1142 |
+|    5 |     7 | 2013 |   3357 | CESSNA                        |          2898 |
+|    5 |     7 | 2013 |   1769 | DOUGLAS                       |          1089 |
+|    5 |     7 | 2013 |   4510 | EMBRAER                       |         77909 |
+|    5 |     7 | 2013 |   3402 | GULFSTREAM AEROSPACE          |          1157 |
+|    5 |     7 | 2013 |    325 | MCDONNELL DOUGLAS             |          7486 |
+|    5 |     7 | 2013 |   2391 | MCDONNELL DOUGLAS AIRCRAFT CO |         15690 |
+|    5 |     7 | 2013 |   1499 | MCDONNELL DOUGLAS CORPORATION |          4767 |
++------+-------+------+--------+-------------------------------+---------------+
+14 rows in set (0.18 sec)
+
+  - Write this statement using a LEFT OUTER JOIN ...
+	- ANSWER: LEFT OUTER JOIN table here:
+
+mysql> select day, month, flights.year, flight, manufacturer, SUM(distance) from flights LEFT JOIN planes ON flights.tailnum = planes.tailnum WHERE day = 5 AND month = 7 AND flights.year = 2013 GROUP BY manufacturer ORDER BY manufacturer;
++------+-------+------+--------+-------------------------------+---------------+
+| day  | month | year | flight | manufacturer                  | SUM(distance) |
++------+-------+------+--------+-------------------------------+---------------+
+|    5 |     7 | 2013 |    701 | NULL                          |        127671 |
+|    5 |     7 | 2013 |    745 | AIRBUS                        |        195089 |
+|    5 |     7 | 2013 |   1431 | AIRBUS INDUSTRIE              |         78786 |
+|    5 |     7 | 2013 |    309 | AMERICAN AIRCRAFT INC         |          2199 |
+|    5 |     7 | 2013 |    527 | BARKER JACK L                 |           937 |
+|    5 |     7 | 2013 |   1712 | BOEING                        |        335028 |
+|    5 |     7 | 2013 |   5747 | BOMBARDIER INC                |         31160 |
+|    5 |     7 | 2013 |   5716 | CANADAIR                      |          1142 |
+|    5 |     7 | 2013 |   3670 | CESSNA                        |          2898 |
+|    5 |     7 | 2013 |   1769 | DOUGLAS                       |          1089 |
+|    5 |     7 | 2013 |   1629 | EMBRAER                       |         77909 |
+|    5 |     7 | 2013 |   3340 | GULFSTREAM AEROSPACE          |          1157 |
+|    5 |     7 | 2013 |    305 | MCDONNELL DOUGLAS             |          7486 |
+|    5 |     7 | 2013 |    874 | MCDONNELL DOUGLAS AIRCRAFT CO |         15690 |
+|    5 |     7 | 2013 |   2379 | MCDONNELL DOUGLAS CORPORATION |          4767 |
++------+-------+------+--------+-------------------------------+---------------+
+15 rows in set (0.20 sec)
+
+  - How do your results compare?
+	- ANSWER:
+
+	> The results from the SELECT statement using the LEFT JOIN returned an extra row of data. They included the distance for flights where the manufacturer column returned NULL data. This was easier to spot once I added ORDER BY to statement.
+
+-----------------------------
+
+4. Write and answer at least one question of your own choosing that joins information from at least three of the tables in the flights database.
+
+	- ANSWER: 
+	[From the flights database, using the airlines, flights, and planes tables]
+
+	QUESTION: Of all of the flights that originate from Newark Liberty International airport (EWR) going to Los Angeles airport (LAX) what model of plane is managed by the carrier United Airlines (UA) that has >= 350 seats on-board?
+
+	> There are 2 model planes operated by UA that satisfy this requirment.
+
+mysql> select airlines.carrier, origin, dest, seats, model FROM planes INNER JOIN flights USING (tailnum) INNER JOIN airlines USING (carrier) WHERE airlines.carrier = 'UA' AND origin = 'EWR' AND dest = 'LAX' AND seats >= 350 GROUP BY MODEL;
++---------+--------+------+-------+---------+
+| carrier | origin | dest | seats | model   |
++---------+--------+------+-------+---------+
+| UA      | EWR    | LAX  |   400 | 777-222 |
+| UA      | EWR    | LAX  |   400 | 777-224 |
++---------+--------+------+-------+---------+
+2 rows in set (0.17 sec)
